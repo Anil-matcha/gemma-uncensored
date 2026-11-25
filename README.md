@@ -1,64 +1,65 @@
 # Gemma Abliterated API with Muapi
 
-Use Muapi's hosted Gemma 4 abliterated variants through a single API key. This guide compares the three Muapi model IDs and includes cURL and Python examples for async requests.
+Compare three hosted Gemma 4 variants: text-only Gemma 4 26B A4B and image-capable 31B Gembrain and SDFT routes.
 
-## Related Projects
+This guide covers three hosted Gemma 4 endpoints. It separates the text-only 26B A4B route from the image-capable 31B variants and records their Muapi catalog limits and prices.
 
-- [Muapi Uncensored AI API guide](https://github.com/Anil-matcha/Uncensored-AI-API) — broader API setup and examples for Muapi's abliterated LLM endpoints.
-- [Awesome Abliterated LLMs](https://github.com/Anil-matcha/awesome-abliterated-llms) — model comparison and evaluation notes.
-- [Open Generative AI](https://github.com/Anil-matcha/Open-Generative-AI) — a creative AI workspace connected to Muapi.
+Muapi uses labels such as abliterated, obliterated, or derestricted for some routes. Those labels describe a model or endpoint; they do not guarantee a response or change Muapi's acceptable-use policy.
 
-## Muapi Gemma routes
+## Choose a model
 
-| Model | Muapi endpoint |
-|---|---|
-| Gemma 4 26B A4B Abliterated | **gemma-4-26b-a4b-abliterated** |
-| Gemma 4 31B Gembrain Abliterated | **gemma-4-31b-gembrain-abliterated** |
-| Gemma 4 31B SDFT Abliterated | **gemma-4-31b-sdft-abliterated** |
+| Muapi model | Context | Input | Input / output per 1M tokens | Output cap | Guide |
+|---|---:|---|---:|---:|---|
+| Gemma 4 26B A4B Abliterated (<code>gemma-4-26b-a4b-abliterated</code>) | 65K | Text | $0.30 / $1.40 | 16384 | [Details](docs/models/gemma-4-26b-a4b-abliterated.md) |
+| Gemma 4 31B Gembrain Abliterated (<code>gemma-4-31b-gembrain-abliterated</code>) | 262K | Text + image | $0.612 / $0.612 | 16384 | [Details](docs/models/gemma-4-31b-gembrain-abliterated.md) |
+| Gemma 4 31B SDFT Abliterated (<code>gemma-4-31b-sdft-abliterated</code>) | 262K | Text + image | $0.612 / $0.612 | 32768 | [Details](docs/models/gemma-4-31b-sdft-abliterated.md) |
 
-The word “uncensored” in this repository name is a search label, not a guarantee about every route or response. Muapi identifies these variants as abliterated; behavior can vary by model and prompt. Follow Muapi's terms and applicable law.
+Catalog rates and availability can change. Prices shown here reflect the Muapi catalog checked on 2026-11-25; verify the live page before production budgeting.
 
 ## Quick start
 
-Create a key at [Muapi API Keys](https://muapi.ai/access-keys), then set it in your shell:
+Create a key in the [Muapi dashboard](https://muapi.ai/access-keys), then set it in your shell:
 
-~~~bash
-export MUAPI_KEY="your-muapi-key"
-~~~
+```bash
+export MUAPI_KEY='your-muapi-key'
+```
 
-Submit a prompt to the 26B A4B route:
+Submit a prompt to the first route:
 
-~~~bash
+```bash
 curl -X POST https://api.muapi.ai/api/v1/gemma-4-26b-a4b-abliterated \
   -H "x-api-key: $MUAPI_KEY" \
   -H "Content-Type: application/json" \
-  -d '{"prompt":"Summarize the design principles behind a well-tested API."}'
-~~~
+  -d '{"prompt":"Explain the trade-offs in this design and list its assumptions."}'
+```
 
-Poll the returned request:
+The response contains a request_id. Poll it for the result:
 
-~~~bash
+```bash
 curl "https://api.muapi.ai/api/v1/predictions/REQUEST_ID/result" \
   -H "x-api-key: $MUAPI_KEY"
-~~~
+```
 
-The other variants use the endpoint IDs in the table. The [Gemma Abliterated API page](https://muapi.ai/gemma-abliterated-api) has current request details, availability, and pricing.
+Runnable Python examples are in [examples](examples/). They submit a prompt, poll the result, or stream text when the selected route supports streaming. See the [Muapi streaming guide](https://muapi.ai/docs/streaming).
 
-## Python example
+## Documentation
 
-Requires Python 3.9+ and **requests**.
+- [Model selection guide](docs/model-selection.md)
+- [API reference and request schemas](docs/api-reference.md)
+- [Pricing](docs/pricing.md)
+- [Operations and error handling](docs/operations.md)
+- [FAQ](docs/faq.md)
+- [Glossary](docs/glossary.md)
+- [Evaluation protocol](docs/evaluation.md)
+- [Prompt templates](prompts.md)
+- [Documentation index](docs/README.md)
 
-~~~bash
-python -m pip install -r requirements.txt
-python examples/submit.py "Explain the difference between precision and recall."
-python examples/submit.py --model gemma-4-31b-sdft-abliterated "Give a concise code review checklist."
-~~~
+## Muapi links
 
-## Links
-
-- [Gemma Abliterated API on Muapi](https://muapi.ai/gemma-abliterated-api)
-- [Muapi API reference](https://muapi.ai/docs/api-reference)
+- [Muapi home](https://muapi.ai)
 - [Create or manage an API key](https://muapi.ai/access-keys)
-- [Muapi](https://muapi.ai)
+- [Muapi API reference](https://muapi.ai/docs/api-reference)
+- [Muapi model catalog](https://muapi.ai/models)
+- [Muapi model-family page](https://muapi.ai/gemma-abliterated-api)
 
-Model availability, request fields, and pricing can change. Confirm them on the live Muapi page.
+This repository documents hosted Muapi routes. It does not distribute model weights or independently verify model behavior. Use Muapi's live page for current availability, fields, and prices.
